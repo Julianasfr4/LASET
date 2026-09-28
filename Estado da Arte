@@ -1,0 +1,21 @@
+Merazga et al. (2025)
+👉 Tema: Arduino + MCP2515 + CAN Bus + Driver L298N + Motor DC + Potenciómetro.
+(É literalmente o hardware da tua bancada).
+
+Park et al. (2011)
+👉 Tema: Bancada NMEA 2000 a 250 kbps + PGN 127488 de controlo de rotação de motor (Engine Speed a cada 0,1 s).
+(É o protocolo marítimo exato que vais usar).
+
+Norma Oficial IEC 61162-3 (2014)
+👉 Tema: A norma internacional que regulamenta os PGNs marítimos e a transição do NMEA 0183 para o NMEA 2000.
+(A fundamentação teórica oficial).
+
+Rogers et al. (2023) – IEEE
+👉 Tema: Análise física da trama CAN (584 
+μ
+μs), temporização e segurança contra injeção de falsos comandos de motor.
+(A análise crítica de cibersegurança e latência).
+
+Maretron RAA100 (Manual Técnico)
+👉 Tema: Produto comercial certificado que converte a rotação de um potenciómetro em dados NMEA 2000 com LEN = 2.
+(O exemplo do mercado real).
