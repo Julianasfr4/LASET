@@ -1,0 +1,37 @@
+\babel@toc {portuguese}{}\relax 
+\contentsline {chapter}{\numberline {1}Introdução}{1}{}%
+\contentsline {section}{\numberline {1.1}Enquadramento e Motivação}{1}{}%
+\contentsline {section}{\numberline {1.2}Princípios de Funcionamento do Protocolo NMEA 2000}{2}{}%
+\contentsline {subsection}{\numberline {1.2.1}Arquitetura de Comunicação (Difusão / Broadcast)}{2}{}%
+\contentsline {subsection}{\numberline {1.2.2}Arbitragem e Resolução de Colisões}{2}{}%
+\contentsline {subsection}{\numberline {1.2.3}Estrutura dos Dados e PGNs}{3}{}%
+\contentsline {section}{\numberline {1.3}Limitações e Desvantagens do Protocolo}{3}{}%
+\contentsline {section}{\numberline {1.4}Cenários de Aplicação}{4}{}%
+\contentsline {section}{\numberline {1.5}Objetivos do Trabalho}{5}{}%
+\contentsline {section}{\numberline {1.6}Estrutura do Relatório}{6}{}%
+\contentsline {chapter}{\numberline {2}Estado da Arte}{7}{}%
+\contentsline {section}{\numberline {2.1}Motores Marítimos Comerciais e Sistemas \textit {Drive-by-Wire}}{7}{}%
+\contentsline {subsection}{\numberline {2.1.1}Classificação e Interfaces de Propulsão}{8}{}%
+\contentsline {subsection}{\numberline {2.1.2}Evolução do Controlo de Aceleração e o Papel do Atuador}{9}{}%
+\contentsline {section}{\numberline {2.2}Prototipagem de Sistemas Mecatrónicos Navais}{10}{}%
+\contentsline {section}{\numberline {2.3}Gateways e Nós Sensores em Redes CAN Navais}{10}{}%
+\contentsline {section}{\numberline {2.4}Análise de Hardware para Nós Atuadores Navais}{11}{}%
+\contentsline {subsection}{\numberline {2.4.1}Atuadores com Rede Embutida vs. Arquitetura Modular}{11}{}%
+\contentsline {subsection}{\numberline {2.4.2}Tipologias de Motores e Drivers de Potência}{12}{}%
+\contentsline {subsection}{\numberline {2.4.3}Microcontroladores e Transceivers CAN}{13}{}%
+\contentsline {section}{\numberline {2.5}Síntese e Posicionamento da Bancada Proposta}{14}{}%
+\contentsline {chapter}{\numberline {3}Análise de Requisitos}{15}{}%
+\contentsline {section}{\numberline {3.1}Requisitos Funcionais}{15}{}%
+\contentsline {section}{\numberline {3.2}Requisitos de Comunicação (Protocolos e Frequências)}{16}{}%
+\contentsline {section}{\numberline {3.3}Requisitos Elétricos}{16}{}%
+\contentsline {section}{\numberline {3.4}Requisitos Físicos e Ambientais}{17}{}%
+\contentsline {chapter}{\numberline {4}Arquitectura de Alto Nível}{19}{}%
+\contentsline {chapter}{\numberline {5}Projecto}{21}{}%
+\contentsline {section}{\numberline {5.1}Arquitectura do Sistema}{21}{}%
+\contentsline {section}{\numberline {5.2}Opções de Projecto}{21}{}%
+\contentsline {section}{\numberline {5.3}Descrição de \textit {Hardware}}{21}{}%
+\contentsline {section}{\numberline {5.4}Descrição do \textit {Software}}{22}{}%
+\contentsline {chapter}{\numberline {6}Implementação}{23}{}%
+\contentsline {chapter}{\numberline {7}Resultados}{25}{}%
+\contentsline {chapter}{\numberline {8}Conclusão e Trabalho Futuro}{27}{}%
+\contentsline {chapter}{\numberline {A}Esquema Eléctrico Total do Sistema}{31}{}%

@@ -1,0 +1,62 @@
+%-----------------------------------------------------------
+%   Capítulo 1 - Introdução
+%-----------------------------------------------------------
+
+\chapter{Introdução}
+\label{chap:introducao}
+
+\section{Enquadramento e Motivação}
+Antes da adoção do NMEA 2000, o padrão utilizado na eletrónica naval era o NMEA 0183. Este sistema antigo baseava-se em ligações ponto-a-ponto, o que obrigava a passar um cabo físico independente entre cada equipamento que precisasse de trocar dados. Para além de gerar infraestruturas de cablagem pesadas e difíceis de manter, a comunicação era lenta e muito limitada, tornando-se rapidamente insuficiente para a quantidade de dados exigida pelos barcos modernos~\cite{tran2021marine}. 
+
+Como resposta a este problema, a \textit{National Marine Electronics Association} desenvolveu o protocolo \textbf{NMEA 2000}. Este novo padrão baseia-se no CAN Bus (\textit{Controller Area Network}), um sistema de comunicação em rede que permite que diferentes componentes eletrónicos de um veículo ou máquina conversem entre si sem precisarem de um computador central~\cite{iec61162_3}.  
+
+Esta tecnologia resolveu o problema dos múltiplos fios ao implementar um único cabo central de comunicação, designado por \textit{backbone} (espinha dorsal). Todos os equipamentos ligam-se a este cabo de forma simples e modular (\textit{plug-and-play}). O sistema destaca-se pela sua elevada resistência a ruídos elétricos, por não falhar caso um único aparelho se desligue, e por organizar a informação em pacotes de dados padronizados, chamados PGNs (\textit{Parameter Group Numbers}). Foi graças a esta fiabilidade que a indústria marítima conseguiu substituir os obsoletos cabos de aceleração mecânicos por comandos estritamente digitais enviados pela rede (sistemas \textit{Drive-by-Wire}).
+
+\section{Princípios de Funcionamento do Protocolo NMEA 2000}
+Para garantir a fiabilidade e a fluidez na troca de dados a bordo de uma embarcação, o protocolo assenta em três princípios fundamentais de comunicação: a arquitetura \textit{multi-master}, a resolução não destrutiva de colisões e a padronização de mensagens através de PGNs.
+
+\subsection{Arquitetura de Comunicação (Difusão / Broadcast)}
+Ao contrário das redes tradicionais baseadas numa lógica de cliente-servidor, o NMEA 2000 utiliza uma arquitetura \textit{multi-master} baseada em difusão (\textit{broadcast}). Isto significa que não existe um computador central a coordenar a rede. Qualquer dispositivo ligado (conhecido como "nó") pode transmitir informação para o cabo principal de forma autónoma. Os dados transmitidos ficam disponíveis para toda a rede; cabe a cada equipamento recetor escutar o tráfego e decidir, de forma independente, processar apenas os dados que lhe são relevantes, ignorando os restantes.
+
+\subsection{Arbitragem e Resolução de Colisões}
+Uma vez que qualquer sensor pode tentar comunicar a qualquer momento, o sistema tem de lidar com a possibilidade de transmissões simultâneas. Como o NMEA 2000 é construído sobre a camada física do CAN Bus, utiliza um mecanismo de arbitragem conhecido como CSMA/CR (\textit{Carrier Sense Multiple Access with Collision Resolution}). Na prática, cada mensagem possui um nível de prioridade. Se dois aparelhos tentarem emitir dados no exato mesmo microssegundo, a mensagem com maior prioridade (nível elétrico dominante) sobrepõe-se. O dispositivo com a mensagem de menor prioridade deteta esta sobreposição, interrompe a sua emissão sem corromper os dados da rede, e aguarda que o barramento fique livre para tentar novamente.
+
+\subsection{Estrutura dos Dados e PGNs}
+Para que equipamentos de marcas diferentes se compreendam, a informação é "empacotada" num formato universal. Uma mensagem NMEA 2000 padrão é constituída por quatro elementos principais:
+\begin{itemize}
+    \item \textbf{Prioridade:} Um valor de 0 a 7, onde 0 representa alarmes críticos e 7 dados de fundo de baixa importância.
+    \item \textbf{Endereço de Origem:} Um número único que identifica qual o nó da rede que está a transmitir a informação.
+    \item \textbf{Payload (Dados):} O valor numérico da leitura do sensor propriamente dito, que viaja num pacote de até 8 bytes.
+    \item \textbf{PGN (Parameter Group Number):} O identificador principal da mensagem. O PGN funciona como um "rótulo" que dita qual é o assunto dos dados transmitidos, permitindo à rede saber instantaneamente se a mensagem se refere a temperatura, rumo, posição de leme ou dados do motor. A lista completa de PGNs é padronizada pela associação NMEA~\cite{nmea_electric_pgn}.
+\end{itemize}
+
+\section{Limitações e Desvantagens do Protocolo}
+Apesar de ser o atual padrão de excelência na indústria, o protocolo NMEA 2000 não é uma solução universal para todos os problemas de comunicação a bordo e apresenta algumas limitações técnicas e comerciais relevantes:
+\begin{enumerate}
+    \item \textbf{Baixa Largura de Banda:} Com uma velocidade limitada a 250~kbit/s, o protocolo é excelente para enviar dados numéricos simples (como coordenadas GPS ou RPM do motor), mas incapaz de transmitir ficheiros pesados, como imagens de radar ou vídeo.
+    \item \textbf{Restrições Físicas da Rede:} Devido às características elétricas do CAN Bus, o tamanho físico da rede obedece a regras muito estritas. O sistema suporta um máximo de 50 equipamentos ligados em simultâneo. Adicionalmente, o cabo de derivação (\textit{drop cable}) que liga cada aparelho à espinha dorsal da rede (\textit{backbone}) não pode exceder os 6 metros de comprimento.
+    \item \textbf{Padrão Fechado e de Elevado Custo:} Sendo o NMEA 2000 um padrão comercial fechado, para que um fabricante consiga obter a documentação técnica e a certificação oficial para os seus produtos, é necessário pagar quantias avultadas. Este modelo encarece substancialmente o preço final dos equipamentos (fichas, cabos e \textit{gateways}) e dificulta o desenvolvimento de soluções por parte de projetos académicos ou de pequena escala.
+\end{enumerate}
+
+\section{Cenários de Aplicação}
+Considerando o elevado custo dos \textit{gateways} comerciais abordado na secção anterior, o desenvolvimento de uma interface bidirecional e da respetiva bancada atuadora apresenta relevância direta para vários cenários no setor marítimo e laboratorial:
+\begin{itemize}
+    \item \textbf{Diagnóstico e Manutenção Naval:} Permite que técnicos utilizem um computador portátil normal para ler códigos de erro (DTCs), calibrar manetes e testar o movimento de atuadores mecânicos numa rede NMEA 2000, sem necessidade de ferramentas proprietárias de custo proibitivo.
+    \item \textbf{Retrofit de Embarcações Antigas:} Facilita a transição de barcos com sistemas de cabo mecânico tradicional para sistemas de controlo eletrónico (\textit{Drive-by-Wire}). O nó atuador desenvolvido pode ser adaptado para mover fisicamente os cabos de um motor antigo através de comandos digitais.
+    \item \textbf{Desenvolvimento de Veículos de Superfície Autónomos (ASVs):} Em ambiente de investigação, a ponte PC-NMEA 2000 permite que algoritmos de navegação autónoma injetem comandos de aceleração diretamente num barramento standard, controlando a embarcação remotamente.
+\end{itemize}
+
+\section{Objetivos do Trabalho}
+Em suma, o presente trabalho tem como objetivo principal o \textbf{desenvolvimento de um \textit{Gateway} (Interface) bidirecional de baixo custo entre um PC e uma rede NMEA 2000}, validando as suas capacidades de atuação \textit{hardware} numa bancada de prototipagem \textit{Hardware-in-the-Loop} (HIL).
+
+Os objetivos específicos compreendem:
+\begin{itemize}
+    \item Estudo aprofundado da arquitetura CAN e dos mecanismos de tradução bidirecional de mensagens (PGNs);
+    \item Desenvolvimento de um nó \textit{Gateway} baseado num microcontrolador moderno para receção de comandos via PC e empacotamento em tramas CAN;
+    \item Desenvolvimento de um nó Atuador capaz de ler os comandos do barramento CAN e acionar, em malha fechada, um motor eletromecânico e ponte H para emulação do acelerador;
+    \item Implementação de comunicação estritamente bidirecional, garantindo o envio do \textit{setpoint} para a rede e a realimentação (\textit{feedback}) do estado mecânico de volta para o computador.
+\end{itemize}
+
+\section{Estrutura do Relatório}
+O presente documento encontra-se estruturado da seguinte forma: 
+O Capítulo 2 aborda o Estado da Arte, mapeando os sistemas comerciais de propulsão, as topologias modulares da literatura, e efetuando uma análise rigorosa aos componentes de \textit{hardware} implementados. O Capítulo 3 detalha as especificações técnicas da Análise de Requisitos. O Capítulo 4 documenta a Arquitetura do Sistema e o dimensionamento da bancada de testes. O Capítulo 5 descreve as Fases de Implementação e validação de \textit{software}. Por fim, no Capítulo 6 são delineadas as Conclusões e possíveis desenvolvimentos para trabalho futuro.

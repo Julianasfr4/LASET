@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Modelo_LaSET.aux
+The style file: unsrt.bst
+Database file #1: bibliografia.bib
+Warning--entry type for "iec61162_3" isn't style-file defined
+--line 102 of file bibliografia.bib
+You've used 13 entries,
+            1791 wiz_defined-function locations,
+            509 strings with 5395 characters,
+and the built_in function-call counts, 2070 in all, are:
+= -- 183
+> -- 69
+< -- 1
++ -- 30
+- -- 17
+* -- 111
+:= -- 301
+add.period$ -- 30
+call.type$ -- 13
+change.case$ -- 8
+chr.to.int$ -- 0
+cite$ -- 13
+duplicate$ -- 104
+empty$ -- 239
+format.name$ -- 17
+if$ -- 478
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 6
+newline$ -- 59
+num.names$ -- 6
+pop$ -- 50
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 48
+stack$ -- 0
+substring$ -- 101
+swap$ -- 22
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 15
+width$ -- 15
+write$ -- 119
+(There was 1 warning)

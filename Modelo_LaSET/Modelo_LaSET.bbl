@@ -1,0 +1,59 @@
+\begin{thebibliography}{10}
+
+\bibitem{tran2021marine}
+T.~Q. Tran, H.~X. Nguyen, and C.~D. Le.
+\newblock Marine network architectures: A survey from nmea 0183 to nmea 2000 and future trends.
+\newblock {\em Journal of Maritime Transport and Marine Technology}, 19(3):45--56, 2021.
+
+\bibitem{iec61162_3}
+Maritime navigation and radiocommunication equipment and systems -- digital interfaces -- part 3: Serial data network, 2014.
+
+\bibitem{nmea_electric_pgn}
+Nmea 2000 messages for electric propulsion, 2023.
+
+\bibitem{volvo_penta_evc}
+Volvo Penta.
+\newblock {\em Volvo Penta Electronic Vessel Control (EVC) System Overview}, 2021.
+
+\bibitem{mercury_smartcraft}
+Mercury Marine.
+\newblock {\em SmartCraft Networked Marine Operations Technical Guide}, 2022.
+
+\bibitem{ertogan2018marine}
+Melek Ertogan, Gokhan~Tansel Tayyar, Philip~A Wilson, and Seniz Ertugrul.
+\newblock Marine measurement and real-time control systems with case studies.
+\newblock {\em Ocean Engineering}, 159:457--469, 2018.
+
+\bibitem{park2011design}
+Dong-Keun Park, Dong-Hyeok Kim, Seung-Min Lee, and Dong-Jin Shin.
+\newblock Design and implementation of an nmea 2000 universal gateway.
+\newblock {\em Journal of the Korean Society of Marine Engineering}, 35(2):278--284, 2011.
+
+\bibitem{merazga2021nmea}
+S.~Merazga, L.~Bougueroua, and A.~Mansour.
+\newblock Low-cost nmea 2000 smart sensor node design for small vessel telemetry.
+\newblock In {\em Proceedings of the IEEE International Conference on Systems and Information Engineering}, pages 112--117, 2021.
+
+\bibitem{linak_canbus}
+LINAK A/S.
+\newblock {\em Actuator with CAN bus - User Manual}, 2021.
+
+\bibitem{puig_rais_2011}
+Miquel Puig~Rais.
+\newblock Sistema de diagnosis per embarcacions.
+\newblock Projeto final de curso, Universitat Politècnica de Catalunya (UPC), 2011.
+
+\bibitem{hughes2019electric}
+Austin Hughes and Bill Drury.
+\newblock {\em Electric Motors and Drives: Fundamentals, Types and Applications}.
+\newblock Newnes, 2019.
+
+\bibitem{infineon_bts7960}
+Infineon Technologies.
+\newblock {\em BTS7960 High Current PN Half Bridge Datasheet}, 2004.
+
+\bibitem{espressif_twai}
+Espressif Systems.
+\newblock {\em ESP32 Technical Reference Manual - Two-Wire Automotive Interface (TWAI)}, 2023.
+
+\end{thebibliography}

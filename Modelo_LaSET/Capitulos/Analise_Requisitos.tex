@@ -1,0 +1,41 @@
+%-----------------------------------------------------------
+%   Capítulo 3 - Análise de Requisitos
+%-----------------------------------------------------------
+\chapter{Análise de Requisitos}
+\label{chap:requisitos}
+
+Conforme validado no Estado da Arte, o projeto consiste na ponte (\textit{Gateway}) entre um ambiente informático padrão (PC) e o barramento naval NMEA 2000, operando em simultâneo como um nó atuador eletromecânico. 
+
+De forma a garantir que o sistema possa ser replicado, fabricado ou continuado por terceiros de forma inequívoca --- funcionando como um rigoroso caderno de encargos --- os requisitos do sistema foram divididos em quatro categorias fundamentais: Funcionais, de Comunicação, Elétricos e Ambientais.
+
+\section{Requisitos Funcionais}
+Os requisitos funcionais definem as ações que o sistema deve obrigatoriamente executar para cumprir o seu propósito.
+\begin{itemize}
+    \item \textbf{RF01 (Tradução Bidirecional):} O sistema deve receber comandos através de porta série (USB) provenientes do computador e convertê-los em tramas CAN (PGNs). Em sentido inverso, deve ler tramas CAN e formatá-las em texto/JSON interpretável pelo computador.
+    \item \textbf{RF02 (Atuação Eletromecânica):} O sistema deve ser capaz de acionar um motor DC em ambos os sentidos de rotação, simulando fisicamente a atuação do cabo de aceleração de um motor de propulsão.
+    \item \textbf{RF03 (Controlo em Malha Fechada):} O sistema deve ler a posição mecânica do atuador através de um potenciómetro (sinal analógico) e corrigir a posição do motor em tempo real para atingir o \textit{setpoint} recebido pela rede.
+\end{itemize}
+
+\section{Requisitos de Comunicação (Protocolos e Frequências)}
+Para garantir a compatibilidade com a rede NMEA 2000 e com o computador, as fronteiras de comunicação exigem parâmetros estritos.
+\begin{itemize}
+    \item \textbf{RC01 (Interface CAN):} O nó deve suportar o protocolo CAN 2.0B (identificadores estendidos de 29~bits), obrigatório para a norma NMEA 2000.
+    \item \textbf{RC02 (Velocidade do Barramento - Baudrate):} A interface CAN deve operar estritamente à frequência de \textbf{250~kbit/s} (norma IEC 61162-3).
+    \item \textbf{RC03 (Interface de Diagnóstico):} A comunicação série por USB com o computador deve operar a um \textit{baudrate} elevado (ex: 115200~bps ou superior) para evitar estrangulamentos de leitura quando o barramento CAN se encontra sob carga máxima.
+\end{itemize}
+
+\section{Requisitos Elétricos}
+As tensões e correntes do hardware definem o dimensionamento dos componentes de potência e de lógica.
+\begin{itemize}
+    \item \textbf{RE01 (Alimentação de Potência):} O circuito de potência (motor e Ponte H) deve operar a \textbf{12~V DC}, que é a tensão padrão das baterias de serviço na maioria das embarcações ligeiras.
+    \item \textbf{RE02 (Alimentação Lógica):} O microcontrolador e o \textit{transceiver} CAN devem operar a \textbf{3,3~V} ou \textbf{5~V}, recorrendo a reguladores de tensão (ex: LM7805 ou AMS1117) alimentados pela fonte primária.
+    \item \textbf{RE03 (Corrente de Atuação):} O \textit{driver} do motor (ex: L298N ou BTS7960) deve suportar correntes contínuas de pelo menos \textbf{2~A a 5~A}, com margem para picos de corrente de arranque do motor DC.
+\end{itemize}
+
+\section{Requisitos Físicos e Ambientais}
+Apesar de o protótipo ser implementado como uma bancada de laboratório, as especificações devem prever as tolerâncias térmicas e espaciais do ambiente alvo (casa das máquinas ou consola de navegação).
+\begin{itemize}
+    \item \textbf{RA01 (Gama de Temperaturas):} O \textit{hardware} (microcontrolador e eletrónica de potência) deve ser especificado para operar de forma fiável numa gama de temperaturas industriais de \textbf{-20\,$^{\circ}$C a +85\,$^{\circ}$C}.
+    \item \textbf{RA02 (Dimensões da Placa - PCB):} Caso seja desenvolvida uma Placa de Circuito Impresso (PCB) dedicada, esta deve apresentar uma área compacta (ex: inferior a 100\,x\,100~mm) para permitir o seu encapsulamento futuro.
+    \item \textbf{RA03 (Isolamento/Grau IP):} Num cenário de produto final, o invólucro do nó atuador teria de cumprir certificação estanque (ex: IP67). Para a bancada laboratorial (fase atual), não há exigência de selagem, mas os circuitos devem prever proteção galvânica (\textit{optoacopladores} ou \textit{transceivers} isolados) se ligados a motores de grande porte.
+\end{itemize}

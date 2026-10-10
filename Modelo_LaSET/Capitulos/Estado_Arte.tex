@@ -1,0 +1,78 @@
+\chapter{Estado da Arte}
+\label{chap:estado_arte}
+
+A transição para os sistemas \textit{Drive-by-Wire} na indústria naval exige testes rigorosos antes da implementação em embarcações reais, devido aos elevados riscos financeiros e de segurança associados à navegação. Por esta razão, o desenvolvimento de protótipos e bancadas de teste laboratoriais (\textit{Hardware-in-the-Loop} --- HIL) tornou-se uma etapa fundamental no projeto de sistemas mecatrónicos marítimos.
+
+\section{Motores Marítimos Comerciais e Sistemas \textit{Drive-by-Wire}}
+Para compreender a necessidade de bancadas de teste baseadas em NMEA 2000, é imperativo analisar os sistemas de propulsão existentes no mercado atual. A indústria naval sofreu uma transição profunda dos motores de combustão com injeção mecânica, controlados por cabos físicos, para motores de injeção eletrónica geridos por Unidades de Controlo (ECUs) e integrados em redes digitais.
+
+Atualmente, os principais fabricantes de motores marítimos utilizam arquiteturas de controlo por sinal elétrico assentes no padrão CAN bus (frequentemente o padrão SAE J1939, sobre o qual o NMEA 2000 se baseia). Destacam-se na indústria sistemas como o \textbf{EVC (Electronic Vessel Control) da Volvo Penta}~\cite{volvo_penta_evc}, o \textbf{SmartCraft da Mercury Marine}~\cite{mercury_smartcraft} e o \textbf{Command Link da Yamaha}. Nestes sistemas de propulsão modernos, a manete do posto de comando atua apenas como um sensor de posição (utilizando potenciómetros ou sensores de efeito Hall), enviando mensagens digitais para a rede do navio que, ao serem descodificadas pela ECU do motor, regulam o regime de rotação e o inversor de marcha.
+
+Adicionalmente, a transição energética trouxe a propulsão puramente elétrica para o setor naval (com sistemas líderes de mercado como os da \textbf{Torqeedo}). Nestes motores de propulsão elétrica, tanto o acelerador como a gestão do banco de baterias comunicam de forma nativa e exclusiva através de redes NMEA 2000 ou barramentos CAN proprietários de arquitetura idêntica. Este panorama comercial demonstra que o controlo de atuadores via rede é a norma atual.
+
+\subsection{Classificação e Interfaces de Propulsão}
+Para estruturar o panorama comercial, a Tabela~\ref{tab:tipos_motores} resume os principais tipos de motores marítimos, os fabricantes de referência e as respetivas interfaces de comunicação utilizadas no mercado atual.
+
+\begin{table}[htpb]
+\centering
+\caption{Tipos de motores marítimos e interfaces de rede típicas.}
+\label{tab:tipos_motores}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\toprule
+\textbf{Tipo} & \textbf{Combustível / Energia} & \textbf{Fabricantes} & \textbf{Interface Típica} \\
+\midrule
+Fora de borda (\textit{Outboard}) & Gasolina (Injeção Eletrónica) & Mercury, Yamaha, Suzuki, Honda & CAN proprietário com \textit{gateway} para NMEA 2000 \\
+Fora de borda elétrico & Bateria e motor BLDC & Torqeedo, Mercury Avator & CAN (PGNs NMEA 127490, 127491) \\
+Interior (\textit{Inboard}) & Diesel com ECU & Volvo Penta, Yanmar, MAN, Cummins & J1939 com \textit{gateway} para NMEA 2000 \\
+\textit{Pod} / \textit{Joystick} & Diesel ou Híbrido & Volvo Penta IPS, Cummins Zeus & CAN proprietário (controlo de unidades múltiplas) \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Evolução do Controlo de Aceleração e o Papel do Atuador}
+Independentemente do tipo de propulsão listado na Tabela~\ref{tab:tipos_motores}, a forma como a vontade do piloto (aceleração) chega ao motor sofreu uma evolução tecnológica clara. Tradicionalmente, utilizava-se o \textbf{sistema mecânico por cabo (Morse)}, onde a manete movia um cabo de aço que acionava fisicamente a borboleta de admissão e a caixa de engrenagens.
+
+Com a eletrificação, surgiu o \textbf{controlo analógico}, onde um potenciómetro na manete (frequentemente com pistas redundantes por motivos de segurança) gera uma tensão variável (ex: 0 a 5~V) lida pela ECU do motor. Mais recentemente, consolidou-se o \textbf{controlo digital por CAN} (\textit{Drive-by-Wire}), utilizando mensagens padrão (como as definidas pela SAE J1939) ou formatos proprietários fechados (como o DTS da Mercury ou o EVC da Volvo Penta).
+
+Contudo, para que os comandos elétricos se traduzam em força mecânica no próprio motor (seja para abrir a admissão de ar, controlar a injeção ou engrenar a marcha), os motores dependem de \textbf{atuadores eletromecânicos}. É precisamente neste domínio que a presente bancada de testes atua. 
+
+\textbf{Importa clarificar uma distinção fundamental do projeto:} o motor DC de 12~V presente na bancada física não emula o motor de propulsão do navio (cuja dinâmica de carga e rotação seria simulada em software). O motor DC faz o papel do \textbf{atuador servo-mecânico do acelerador}. Para soluções de prototipagem de baixo custo e elevada fiabilidade, os motores DC com escovas controlados por Ponte H e sinais PWM são a escolha primária para atuar estas hastes de controlo em ambiente laboratorial~\cite{ertogan2018marine}.
+
+\section{Prototipagem de Sistemas Mecatrónicos Navais}
+No contexto do desenvolvimento e teste destes sistemas de controlo em tempo real, Ertogan \textit{et al.}~\cite{ertogan2018marine} apresentam um estudo abrangente sobre a medição e controlo de sistemas mecatrónicos navais. O artigo detalha a criação de protótipos laboratoriais e ensaios à escala real para o controlo de balanço e controlo de \textit{trim} em embarcações. 
+
+Os autores destacam o uso de redes NMEA 2000 para a integração de sensores e a utilização de microcontroladores embutidos e PLCs industriais para o processamento de algoritmos de controlo. No projeto de controlo de \textit{trim}, os atuadores eletromecânicos foram comandados através de sinais de Modulação por Largura de Impulso (PWM) gerados na rede. Esta é uma abordagem tecnologicamente idêntica ao acionamento de motores DC pretendido nesta bancada. O estudo enfatiza que a seleção de controladores e atuadores para protótipos navais deve considerar as restrições de tempo de ciclo, a capacidade do barramento de comunicação e a fiabilidade da transição do laboratório para o mar~\cite{ertogan2018marine}.
+
+\section{Gateways e Nós Sensores em Redes CAN Navais}
+Paralelamente aos grandes sistemas de controlo, a literatura tem explorado a interface de componentes de baixo custo com os barramentos marítimos. Park \textit{et al.}~\cite{park2011design} e Merazga \textit{et al.}~\cite{merazga2021nmea} desenvolveram arquiteturas baseadas em microcontroladores e transceivers CAN (como o MCP2515) para integrar e descodificar dados em redes NMEA 2000. 
+
+Estes projetos académicos validam a viabilidade técnica de utilizar plataformas de microcontroladores acessíveis (semelhantes aos ecossistemas ESP32 ou Teensy) para empacotar e injetar tramas CAN (PGNs) de forma determinística e fiável na rede, substituindo a necessidade de usar módulos industriais fechados e dispendiosos apenas para a aquisição de um sensor simples.
+
+\section{Análise de Hardware para Nós Atuadores Navais}
+Para a construção física de nós atuadores compatíveis com redes NMEA 2000, o estado da arte do \textit{hardware} engloba componentes de processamento, atuação motriz e \textit{drivers} de potência. O mercado e a literatura académica apresentam diversas soluções tecnológicas para cada um destes níveis.
+
+\subsection{Atuadores com Rede Embutida vs. Arquitetura Modular}
+O mercado industrial de automação naval oferece motores e atuadores lineares inteligentes (como os desenvolvidos por fabricantes como a Linak ou Thomson) que integram o motor mecânico, o \textit{driver} de potência e o controlador CAN (J1939/NMEA 2000) num único encapsulamento selado, frequentemente com certificação IP67~\cite{linak_canbus}. Estas soluções oferecem robustez e facilidade de integração (\textit{plug-and-play}). No entanto, representam um elevado investimento financeiro e operam com \textit{firmware} fechado, o que limita a manipulação livre das tramas CAN (PGNs) para exploração e integração em ambientes de desenvolvimento académico.
+
+Em contraponto, a investigação laboratorial tem explorado ativamente a \textbf{arquitetura modular}~\cite{ertogan2018marine, puig_rais_2011}. Esta abordagem consiste em utilizar um atuador \textit{standard}, gerido por um \textit{driver} independente e um microcontrolador genérico com interface CAN. A arquitetura modular destaca-se na literatura por minimizar os custos de desenvolvimento e garantir total transparência sobre a programação do protocolo de rede.
+
+\subsection{Tipologias de Motores e Drivers de Potência}
+Na adoção de soluções modulares, a topologia do motor dita a complexidade do sistema eletrónico:
+\begin{itemize}
+    \item \textbf{Motores de Passo (\textit{Stepper}) e \textit{Brushless} DC (BLDC):} Caracterizam-se por um controlo de posição e velocidade de alta precisão e pela ausência de escovas (traduzindo-se em menor manutenção). Contudo, a sua implementação exige algoritmos de comutação eletrónica avançados e \textit{drivers} complexos, o que pode representar um grau de complexidade desnecessário para a emulação de comandos mecânicos simples~\cite{hughes2019electric}.
+    \item \textbf{Motores DC com Escovas (\textit{Brushed DC}):} Surgem como a topologia motriz mais abordada na literatura de baixo custo. O binário e a velocidade são geridos de forma expedita através de modulação por largura de impulso (PWM)~\cite{hughes2019electric}. Em aplicações que requerem servo-controlo, a literatura acopla frequentemente sensores resistivos (potenciómetros) ao eixo mecânico para fechar a malha de controlo de posição~\cite{ertogan2018marine}.
+\end{itemize}
+
+A atuação desta potência requer a utilização de Pontes-H. O mercado disponibiliza desde módulos tradicionais baseados em transístores bipolares (como o L298N), que apresentam limitações de corrente (frequentemente até 2~A) e elevada dissipação térmica, até \textit{drivers} modernos baseados em MOSFETs (como o BTS7960)~\cite{infineon_bts7960}. Estes últimos permitem o trânsito de correntes contínuas muito superiores (acima de 40~A), apresentando as eficiências térmicas adequadas para o controlo de cargas mecatrónicas de maior exigência.
+
+\subsection{Microcontroladores e Transceivers CAN}
+A literatura de prototipagem de redes revela uma evolução clara nas unidades de processamento utilizadas. Inicialmente, a esmagadora maioria dos sistemas assentava em plataformas de 8~bits a 16~MHz (como a família Arduino Uno/Mega). Por carecerem de controladores CAN nativos, estas plataformas exigem a acoplagem de controladores externos via barramento SPI (como o módulo MCP2515). Diversos estudos demonstram que a interface SPI pode introduzir estrangulamentos no processamento perante o elevado tráfego de redes a 250~kbit/s (como o NMEA 2000), resultando em potenciais perdas de pacotes ou latências na atuação~\cite{park2011design}.
+
+Sistemas mais recentes de automação e \textit{Internet of Things} (IoT) analisados na literatura baseiam-se em arquiteturas de 32~bits de elevado desempenho (como o ESP32 da Espressif ou a família Teensy). A principal característica diferenciadora desta geração de microcontroladores é a incorporação de controladores CAN no próprio silício~\cite{espressif_twai}. Esta arquitetura requer apenas a adição de um transceptor (\textit{transceiver}) passivo (como o SN65HVD230 ou MCP2551) para adaptar os níveis lógicos (3,3~V/5~V) às tensões diferenciais do barramento CAN. É este componente físico que viabiliza a \textbf{comunicação bidirecional} inerente ao protocolo NMEA 2000 (em clara oposição à topologia maioritariamente unidirecional do antigo NMEA 0183). A bidirecionalidade é um requisito crítico para nós atuadores, uma vez que permite ao microcontrolador receber comandos de controlo da rede e, em simultâneo, transmitir dados de realimentação (ex: posição mecânica atual do atuador, diagnósticos ou alertas de falha). Este paradigma liberta a unidade de processamento principal da exigente gestão elétrica do protocolo, reservando o seu poder computacional para a lógica de aquisição de dados e atuação motriz.
+
+\section{Síntese e Posicionamento da Bancada Proposta}
+A análise da literatura e do mercado revela um hiato prático. Por um lado, o mercado oferece motores de alta tecnologia (Volvo Penta, Mercury) que operam em circuito fechado sobre NMEA 2000, enquanto a prototipagem literária recorre a PCs industriais complexos~\cite{ertogan2018marine}. Por outro lado, os trabalhos baseados em microcontroladores~\cite{park2011design,merazga2021nmea} limitam-se muitas vezes à monitorização passiva, sem a inclusão de atuadores físicos.
+
+O presente trabalho posiciona-se exatamente na intersecção destas áreas: visa criar uma bancada de teste focada no \textbf{controlo ativo ponta-a-ponta} simulando a propulsão naval atual. Utilizando hardware acessível e de código aberto, o sistema lê de forma analógica um potenciómetro (simulando uma manete eletrónica comercial), transmite a posição digitalmente num barramento CAN (simulando a rede do navio), e atua fisicamente um motor DC com PWM (simulando a resposta da ECU do motor marítimo).
