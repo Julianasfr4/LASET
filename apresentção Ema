@@ -1,0 +1,63 @@
+haverá de ser algo assim neste registo
+
+Passando agora aos requisitos do sistema, estes foram definidos a partir do objetivo principal do projeto, que consiste no desenvolvimento de um gateway bidirecional entre uma rede NMEA 2000 e um computador, através de Ethernet, utilizando um microcontrolador STM32.
+
+Os requisitos foram divididos em duas categorias: funcionais e não funcionais.
+
+**Relativamente aos requisitos funcionais**, estes descrevem as operações que o gateway deve realizar para permitir a comunicação entre as interfaces.
+
+A principal funcionalidade é a **comunicação bidirecional**.
+
+No sentido NMEA 2000 para Ethernet, o gateway deve receber as tramas CAN provenientes dos dispositivos da rede e encaminhar a informação para o computador, utilizando um formato de comunicação adequado.
+
+No sentido contrário, o gateway deve receber os pedidos enviados pelo computador através de Ethernet, interpretar e validar esses pedidos e realizar as transmissões correspondentes na rede NMEA 2000.
+
+Durante este processo, é necessário garantir a **preservação da informação**, incluindo os dados transportados e os elementos de identificação relevantes.
+
+É importante salientar que o gateway não pretende interpretar o significado físico dos diferentes parâmetros NMEA 2000. A sua função é transportar a informação entre as interfaces, ficando a interpretação dos dados a cargo das aplicações executadas no computador.
+
+Outro requisito funcional importante está relacionado com a **participação na rede NMEA 2000**.
+
+Como o gateway não será apenas um dispositivo de receção, mas também irá transmitir informação, deverá implementar os mecanismos necessários à sua participação na rede, nomeadamente o processo de *Address Claiming*, utilizado na gestão do endereço de origem dos dispositivos.
+
+Também é necessário considerar o **tratamento de mensagens de múltiplas tramas**, como as mensagens que utilizam o mecanismo *Fast-Packet*.
+
+Uma vez que uma trama CAN clássica transporta, no máximo, oito bytes de dados, determinadas mensagens NMEA 2000 são distribuídas por várias tramas.
+
+O gateway deverá assegurar que essa informação é corretamente transportada entre as interfaces. A reconstrução das mensagens poderá ser realizada no próprio gateway ou no computador, dependendo da representação escolhida para a comunicação Ethernet.
+
+Por último, os requisitos funcionais incluem a **validação dos pedidos de transmissão**, de forma a impedir que pedidos malformados ou incompatíveis originem transmissões indevidas na rede NMEA 2000.
+
+**Passando aos requisitos não funcionais**, estes estabelecem as características técnicas e as condições de funcionamento do sistema.
+
+Na área da **comunicação**, o gateway deverá utilizar Ethernet com fios na ligação ao computador e interfaces compatíveis com NMEA 2000, baseadas em CAN clássico, com uma taxa de transmissão de 250 quilobits por segundo e identificadores estendidos de 29 bits.
+
+Será também necessário definir um formato de comunicação sobre Ethernet que permita representar e identificar corretamente a informação transportada.
+
+Na área da **integridade e do desempenho**, pretende-se que o gateway preserve a informação durante o encaminhamento e apresente um desempenho adequado às condições de tráfego previstas.
+
+Para isso, serão avaliados parâmetros como a latência de encaminhamento, a capacidade de transmissão e o comportamento perante diferentes níveis de ocupação da rede.
+
+**Outro aspeto importante é a robustez da comunicação e o tratamento de falhas.**
+
+Para este efeito, a solução prevista contempla a utilização de **dois barramentos CAN/NMEA 2000**.
+
+Esta arquitetura permite considerar a utilização de um segundo barramento quando o primeiro apresenta problemas de comunicação, contribuindo para a disponibilidade do sistema.
+
+No entanto, será necessário definir como o gateway identifica uma falha, em que condições poderá utilizar o outro barramento e como será gerida a comunicação durante essa transição.
+
+Devem também ser consideradas falhas na ligação Ethernet, como a interrupção da comunicação com o computador, bem como situações de sobrecarga em que a informação recebida não possa ser imediatamente encaminhada.
+
+O objetivo é assegurar um comportamento controlado perante estas situações, evitando transmissões indevidas e a utilização de informação inválida.
+
+**Finalmente, temos os requisitos relacionados com a alimentação e a proteção elétrica.**
+
+A solução deverá garantir uma alimentação adequada aos componentes utilizados e incorporar as medidas de proteção necessárias às interfaces de comunicação e alimentação.
+
+Neste contexto, será também analisada a necessidade de **isolamento galvânico**, tendo em conta a arquitetura elétrica e as condições de instalação previstas.
+
+Este aspeto é particularmente relevante porque o gateway estabelece uma ligação entre equipamentos que poderão apresentar diferentes referências elétricas.
+
+**Em síntese**, os requisitos definidos procuram garantir não apenas a comunicação bidirecional entre Ethernet e NMEA 2000, mas também a preservação da informação, a participação correta na rede e um comportamento controlado perante falhas.
+
+O cumprimento destes requisitos será posteriormente avaliado através de ensaios de comunicação, comparação dos dados transmitidos e recebidos, medições de desempenho e testes de falhas nas interfaces.
