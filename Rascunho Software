@@ -1,0 +1,72 @@
+Gateway NMEA 2000: divisão do problema de software
+
+Problema grande
+O problema grande é um gateway bidirecional entre Ethernet e NMEA 2000. Divide-se em dez blocos, e cada bloco em problemas pequenos, resolúveis em poucas horas ou num dia.
+Este documento cobre só a parte de software. O hardware (validação dos componentes e PCB) fica com a colega de projeto.
+Os blocos 0 a 8 fazem-se já no Linux, com o firmware escrito em C/C++ e testado num barramento CAN virtual. O bloco 9 espera pela placa.
+
+Blocos que se fazem já, no Linux
+0. Preparar o ambiente
+[ ] 0.1 Criar a interface CAN virtual vcan0 e trocar tramas com cansend e candump.
+[ ] 0.2 Instalar o canboat e pô-lo a descodificar o que passa no vcan0.
+[ ] 0.3 Criar o projeto em C/C++ com CMake e git, a compilar um programa vazio.
+Feito quando: uma trama enviada num terminal aparece descodificada pelo canboat noutro.
+1. Definir o protocolo PC↔gateway
+É papel, não é código.
+[ ] 1.1 Formato das mensagens no sentido rede→PC.
+[ ] 1.2 Formato dos pedidos no sentido PC→rede.
+[ ] 1.3 Transporte: UDP ou TCP, e que portas.
+[ ] 1.4 Mensagens de estado e de erro.
+Feito quando: existe uma página que outra pessoa conseguiria implementar sem fazer perguntas.
+2. Fronteira com o hardware
+[ ] 2.1 Definir a interface: can_send, can_receive, net_send, net_receive, millis.
+[ ] 2.2 Implementá-la no Linux para o CAN (SocketCAN).
+[ ] 2.3 Implementá-la no Linux para a rede (sockets UDP).
+Feito quando: um programa de teste usa só estas funções para ler do vcan0 e enviar por UDP.
+3. Sentido rede → PC (RF01, RF03)
+[ ] 3.1 Ler uma trama CAN e imprimi-la.
+[ ] 3.2 Separar o identificador de 29 bits em prioridade, PGN, origem e destino.
+[ ] 3.3 Formatar a trama segundo o protocolo e enviá-la por UDP.
+[ ] 3.4 Pôr uma fila circular entre a receção e o envio, e contar as tramas perdidas.
+Feito quando: o que entra no vcan0 chega igual ao PC, verificado no Wireshark.
+4. Ser um nó NMEA 2000 (RF04)
+[ ] 4.1 Compilar a biblioteca NMEA2000 no Linux, ligada à interface do bloco 2.
+[ ] 4.2 Address claim: o gateway reclama um endereço ao arrancar.
+[ ] 4.3 Conflito: outro nó reclama o mesmo endereço e o gateway reage bem.
+[ ] 4.4 Responder a pedidos de informação (ISO Request, Product Information, Heartbeat).
+Feito quando: o canboat lista o gateway como um dispositivo da rede.
+Questão em aberto: confirmar se existe um port da biblioteca NMEA2000 para SocketCAN antes de contar com ele.
+5. Sentido PC → rede (RF02, RF05)
+[ ] 5.1 Receber um pedido por UDP e interpretá-lo.
+[ ] 5.2 Validá-lo: formato, tamanho, PGN permitido, modo só de leitura.
+[ ] 5.3 Enviar um PGN que cabe numa trama (até 8 bytes).
+[ ] 5.4 Enviar um PGN em fast-packet (várias tramas).
+[ ] 5.5 Limitar a taxa de envio.
+[ ] 5.6 Responder ao PC: aceite, ou rejeitado com o motivo.
+Feito quando: um pedido válido aparece descodificado no canboat, e um inválido não gera nenhuma trama.
+6. Supervisão e falhas (RF06, RNF10)
+[ ] 6.1 Contadores: recebidas, enviadas, perdidas, rejeitadas.
+[ ] 6.2 Mensagem de estado periódica para o PC.
+[ ] 6.3 Definir e implementar o que acontece quando o PC desaparece.
+[ ] 6.4 Estado de erro do CAN e bus-off: aqui só se prepara a interface; o teste real precisa da placa.
+7. Configuração
+[ ] 7.1 Estrutura com IP, porta, modo e lista de PGNs permitidos.
+[ ] 7.2 Comandos para a ler e alterar a partir do PC.
+[ ] 7.3 Guardar em flash: precisa da placa.
+8. Ensaios (RNF04)
+[ ] 8.1 Testes automáticos com pedidos malformados.
+[ ] 8.2 Gerador de tráfego e medição de perdas e latência.
+Bloco que espera pela placa
+9. Passagem para o STM32
+[ ] 9.1 Ethernet com LwIP a responder a ping.
+[ ] 9.2 Eco de UDP.
+[ ] 9.3 Driver CAN a 250 kbit/s.
+[ ] 9.4 Implementar a interface do bloco 2 em cima de 9.1 a 9.3.
+[ ] 9.5 Tarefas do FreeRTOS e watchdog.
+[ ] 9.6 Repetir os ensaios do bloco 8 no hardware.
+Ordem
+O primeiro problema a atacar é o 0.1, que são três comandos no terminal.
+• Os blocos 0 a 5 fazem-se por esta ordem.
+• O bloco 1 pode ir em paralelo com o 0, e só tem de estar fechado antes do 3.3.
+• Os blocos 6, 7 e 8 só fazem sentido depois do 5.
+• O bloco 9 começa no dia em que a placa chegar, mesmo que os anteriores não estejam acabados.
