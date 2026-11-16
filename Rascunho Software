@@ -7,9 +7,9 @@ Os blocos 0 a 8 fazem-se já no Linux, com o firmware escrito em C/C++ e testado
 
 Blocos que se fazem já, no Linux
 0. Preparar o ambiente
-[ ] 0.1 Criar a interface CAN virtual vcan0 e trocar tramas com cansend e candump.
-[ ] 0.2 Instalar o canboat e pô-lo a descodificar o que passa no vcan0.
-[ ] 0.3 Criar o projeto em C/C++ com CMake e git, a compilar um programa vazio.
+[X] 0.1 Criar a interface CAN virtual vcan0 e trocar tramas com cansend e candump.
+[X] 0.2 Instalar o canboat e pô-lo a descodificar o que passa no vcan0.
+[X] 0.3 Criar o projeto em C/C++ com CMake e git, a compilar um programa vazio.
 Feito quando: uma trama enviada num terminal aparece descodificada pelo canboat noutro.
 1. Definir o protocolo PC↔gateway
 É papel, não é código.
